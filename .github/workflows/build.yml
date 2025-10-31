@@ -20,4 +20,14 @@ jobs:
           cache: 'maven' # or 'gradle' if using Gradle
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml # or 'gradle build' for Gradle
+        run: mvn clean install
+
+      - name: Build and push docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: mummoorthins/springboot-cicd-example
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
